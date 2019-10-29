@@ -8,13 +8,13 @@ import java.util.Date;
 import io.shardingsphere.api.algorithm.sharding.PreciseShardingValue;
 import io.shardingsphere.api.algorithm.sharding.standard.PreciseShardingAlgorithm;
 
-public class UserIdSpliteAlgorithm implements PreciseShardingAlgorithm<Date> {
+public class UserIdSpliteAlgorithm implements PreciseShardingAlgorithm<Long> {
 
 	@Override
-	public String doSharding(Collection<String> availableTargetNames, PreciseShardingValue<Date> shardingValue) {
+	public String doSharding(Collection<String> availableTargetNames, PreciseShardingValue<Long> shardingValue) {
 		// TODO Auto-generated method stub
 		System.out.println("aaaaaaaaaaaaaa");
-		Date b =shardingValue.getValue();
+		Long b =shardingValue.getValue();
 		//String a = "_"+b%2;
 		/*System.out.println(shardingValue.getValue()+","+a);
 		for(String each:availableTargetNames) {
@@ -23,8 +23,9 @@ public class UserIdSpliteAlgorithm implements PreciseShardingAlgorithm<Date> {
 				return each;
 			}
 		}*/
-		DateFormat df = new SimpleDateFormat("yyyyMM");
-		return "t_order_"+df.format(b);
+		//DateFormat df = new SimpleDateFormat("yyyyMM");
+		
+		return "t_order_"+Math.floorMod(b.longValue(), 2L);
 	
 	}
 

@@ -22,10 +22,19 @@ import io.shardingsphere.example.repository.api.entity.Order;
 import io.shardingsphere.example.repository.api.entity.OrderItem;
 import io.shardingsphere.example.repository.api.repository.OrderItemRepository;
 import io.shardingsphere.example.repository.api.repository.OrderRepository;
+import io.shardingsphere.transaction.annotation.ShardingTransactionType;
+import io.shardingsphere.transaction.api.TransactionType;
+
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public abstract class CommonServiceImpl implements CommonService {
     
@@ -45,12 +54,13 @@ public abstract class CommonServiceImpl implements CommonService {
     
     @Transactional
     @Override
+    @ShardingTransactionType(TransactionType.XA)
     public void processSuccess(final boolean isRangeSharding) {
         System.out.println("-------------- Process Success Begin ---------------");
         List<Long> orderIds = insertData();
-        //printData(isRangeSharding);
-        //deleteData(orderIds);
         printData(isRangeSharding);
+        //deleteData(orderIds);
+        //printData(isRangeSharding);
         System.out.println("-------------- Process Success Finish --------------");
     }
     
@@ -63,26 +73,47 @@ public abstract class CommonServiceImpl implements CommonService {
         throw new RuntimeException("Exception occur for transaction test.");
     }
     
-    private List<Long> insertData() {
-        System.out.println("---------------------------- Insert Data ----------------------------");
-        List<Long> result = new ArrayList<>(10);
-        for (int i = 1; i <= 10; i++) {
-            Order order = newOrder();
-            LongGenerator  gen = new LongGenerator();
-            order.setOrderId((Long)gen.generateKey());
-            order.setUserId(i);
-            order.setStatus("INSERT_TEST");
-            getOrderRepository().insert(order);
-            OrderItem item = newOrderItem();
-            item.setOrderItemId((Long)gen.generateKey());
-            item.setOrderId(order.getOrderId());
-            item.setUserId(i);
-            item.setStatus("INSERT_TEST");
-            getOrderItemRepository().insert(item);
-            //result.add(order.getOrderId());
-        }
-        return result;
-    }
+	private List<Long> insertData() {
+		System.out.println("---------------------------- Insert Data ----------------------------");
+		List<Long> result = new ArrayList<>(10);
+		try {
+			Date d1 = new Date();
+			String s2 = "201911";
+			String s3 = "201912";
+			DateFormat df = new SimpleDateFormat("yyyyMM");
+
+			Date d2 = df.parse(s2);
+			Date d3 = df.parse(s3);
+			List<Date> dl = new ArrayList<Date>();
+			dl.add(d1);
+			dl.add(d2);
+			dl.add(d3);
+			Random r = new Random();
+			for (int i = 1; i <= 10; i++) {
+				Order order = newOrder();
+				LongGenerator gen = new LongGenerator();
+				order.setOrderId((Long) gen.generateKey());
+				order.setUserId(i);
+				order.setStatus("INSERT_TEST");
+				int j = r.nextInt();
+				//order.setCreateTime(dl.get(Math.floorMod(j, 3)));
+
+				getOrderRepository().insert(order);
+				OrderItem item = newOrderItem();
+				item.setOrderItemId((Long) gen.generateKey());
+				item.setOrderId(order.getOrderId());
+				item.setUserId(i);
+				item.setStatus("INSERT_TEST");
+				getOrderItemRepository().insert(item);
+
+				// result.add(order.getOrderId());
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
     
     private void deleteData(final List<Long> orderIds) {
         System.out.println("---------------------------- Delete Data ----------------------------");
@@ -104,11 +135,11 @@ public abstract class CommonServiceImpl implements CommonService {
     private void printDataRange() {
         System.out.println("---------------------------- Print Order Data -----------------------");
         for (Object each : getOrderRepository().selectRange()) {
-            System.out.println(each);
+            System.out.println("orderId+"+ each);
         }
         System.out.println("---------------------------- Print OrderItem Data -------------------");
         for (Object each : getOrderItemRepository().selectRange()) {
-            System.out.println(each);
+            System.out.println("orderItemId+"+each);
         }
     }
     

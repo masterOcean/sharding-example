@@ -19,6 +19,8 @@ package io.shardingsphere.example.repository.jpa.entity;
 
 import io.shardingsphere.example.repository.api.entity.Order;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,4 +50,9 @@ public final class OrderEntity extends Order {
     public String getStatus() {
         return super.getStatus();
     }
+    
+    //@Column(name = "create_time")
+  /*  public Date getCreateTime() {
+    	return super.getCreateTime();
+    }*/
 }

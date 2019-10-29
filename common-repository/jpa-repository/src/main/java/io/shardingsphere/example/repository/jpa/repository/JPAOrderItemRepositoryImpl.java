@@ -25,6 +25,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Repository
@@ -65,12 +69,27 @@ public class JPAOrderItemRepositoryImpl implements OrderItemRepository {
     @SuppressWarnings("unchecked")
     @Override
     public List<OrderItem> selectAll() {
-        return (List<OrderItem>) entityManager.createQuery("SELECT i FROM OrderEntity o, OrderItemEntity i WHERE o.orderId = i.orderId").getResultList();
-    }
+        return (List<OrderItem>) entityManager.createQuery("SELECT i FROM  OrderItemEntity i ,OrderEntity o WHERE i.orderId = o.orderId").getResultList();
+    
+/*    	return (List<OrderItem>) entityManager.createQuery("SELECT i FROM OrderItemEntity i").getResultList();
+*/    	}
     
     @SuppressWarnings("unchecked")
     @Override
     public List<OrderItem> selectRange() {
-        return (List<OrderItem>) entityManager.createQuery("SELECT i FROM OrderEntity o, OrderItemEntity i WHERE o.orderId = i.orderId AND o.userId BETWEEN 1 AND 5").getResultList();
+    	DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+        	return (List<OrderItem>) entityManager.createQuery("SELECT i FROM OrderEntity o, OrderItemEntity i WHERE o.orderId = i.orderId AND o.userId BETWEEN 0 AND 1000 ")
+        			.getResultList();
+        /*	return (List<OrderItem>) entityManager.createQuery("SELECT i FROM OrderEntity o, OrderItemEntity i WHERE o.orderId = i.orderId  ")
+        			.getResultList();*/
+			//return (List<OrderItem>) entityManager.createQuery("SELECT i FROM OrderEntity o, OrderItemEntity i WHERE o.orderId = i.orderId AND o.createTime BETWEEN ? AND ? ")
+				//	.setParameter(1, df.parse("2019-10-28 00:00:00"))
+				//	.setParameter(2, df.parse("2019-10-30 00:00:00")).getResultList();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
     }
 }

@@ -29,6 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("io.shardingsphere.example.repository.jpa")
 @EntityScan(basePackages = "io.shardingsphere.example.repository.jpa.entity")
 @SpringBootApplication(exclude = JtaAutoConfiguration.class)
+@ComponentScan("io.shardingsphere.transaction.aspect")
 public class SpringBootStarterExample {
     
     public static void main(final String[] args) {
@@ -39,7 +40,7 @@ public class SpringBootStarterExample {
     
     private static void process(final ConfigurableApplicationContext applicationContext) {
         CommonService commonService = getCommonService(applicationContext);
-        commonService.processSuccess(false);
+        commonService.processSuccess(true);
         try {
            // commonService.processFailure();
         } catch (final Exception ex) {

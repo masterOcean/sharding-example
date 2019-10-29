@@ -25,6 +25,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -71,6 +73,7 @@ public class JPAOrderRepositoryImpl implements OrderRepository {
     @SuppressWarnings("unchecked")
     @Override
     public List<Order> selectRange() {
-        return (List<Order>) entityManager.createQuery("SELECT o FROM OrderEntity o WHERE orderId BETWEEN 200000000000000000 AND 400000000000000000").getResultList();
+    	//return new ArrayList<Order>();
+        return (List<Order>) entityManager.createQuery("SELECT o FROM OrderEntity o WHERE o.userId in (2,4,6,8)").getResultList();
     }
 }

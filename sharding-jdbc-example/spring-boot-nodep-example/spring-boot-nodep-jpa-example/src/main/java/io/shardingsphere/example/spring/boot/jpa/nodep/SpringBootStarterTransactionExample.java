@@ -40,10 +40,10 @@ public class SpringBootStarterTransactionExample {
     private static void process(final ConfigurableApplicationContext applicationContext) {
         TransactionService transactionService = getTransactionService(applicationContext);
         transactionService.processSuccess(false);
-        processFailureSingleTransaction(transactionService, TransactionType.LOCAL);
-        processFailureSingleTransaction(transactionService, TransactionType.XA);
-        processFailureSingleTransaction(transactionService, TransactionType.BASE);
-        processFailureSingleTransaction(transactionService, TransactionType.LOCAL);
+       // processFailureSingleTransaction(transactionService, TransactionType.LOCAL);
+        //processFailureSingleTransaction(transactionService, TransactionType.XA);
+       // processFailureSingleTransaction(transactionService, TransactionType.BASE);
+       // processFailureSingleTransaction(transactionService, TransactionType.LOCAL);
     }
     
     private static void processFailureSingleTransaction(final TransactionService transactionService, final TransactionType type) {

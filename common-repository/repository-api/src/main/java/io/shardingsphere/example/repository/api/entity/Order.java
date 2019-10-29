@@ -18,6 +18,7 @@
 package io.shardingsphere.example.repository.api.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Order implements Serializable {
     
@@ -28,6 +29,8 @@ public class Order implements Serializable {
     private int userId;
     
     private String status;
+    
+   // private Date createTime;
     
     public long getOrderId() {
         return orderId;
@@ -57,4 +60,12 @@ public class Order implements Serializable {
     public String toString() {
         return String.format("order_id: %s, user_id: %s, status: %s", orderId, userId, status);
     }
+
+	/*public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}*/
 }
